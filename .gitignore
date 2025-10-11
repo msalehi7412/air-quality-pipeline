@@ -1,0 +1,16 @@
+﻿# Python
+__pycache__/
+*.pyc
+
+# Virtual env
+.venv/
+
+# Local data & outputs (keep repo slim)
+data/raw/
+data/processed/
+figures/
+reports/
+
+# OS / editor
+.DS_Store
+.vscode/
