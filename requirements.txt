@@ -1,0 +1,4 @@
+﻿pandas
+requests
+matplotlib
+pyarrow
