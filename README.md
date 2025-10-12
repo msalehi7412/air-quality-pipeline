@@ -1,4 +1,5 @@
 # 🌍 Air Quality Analysis Pipeline
+*Updated: Oct, 2025*
 
 A modular Python pipeline for **environmental data collection, cleaning, and visualization** using real-time data from the [Open-Meteo Air Quality API](https://open-meteo.com/).  
 It fetches hourly air pollutant data (PM2.5, PM10, NO₂, CO, etc.), aggregates it into daily averages, and produces **combined and per-pollutant visualizations**.
