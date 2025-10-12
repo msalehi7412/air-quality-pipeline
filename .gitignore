@@ -14,3 +14,14 @@ reports/
 # OS / editor
 .DS_Store
 .vscode/
+# Data outputs
+data/raw/
+data/processed/
+
+# Figures and reports
+figures/
+reports/
+
+# Environment and cache
+.venv/
+__pycache__/
