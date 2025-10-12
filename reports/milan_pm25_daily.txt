@@ -1,4 +1,0 @@
-Observations: 93
-Mean: 51.01
-Min: 7.06
-Max: 101.40
