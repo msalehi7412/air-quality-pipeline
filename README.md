@@ -1,179 +1,141 @@
-Air Quality Pipeline & Dashboard
+![CI](https://github.com/msalehi7412/air-quality-pipeline/actions/workflows/ci.yml/badge.svg)
 
-Modular Python pipeline to fetch → clean → analyze → visualize multi-pollutant air-quality data from the Open-Meteo Air Quality API. Includes a one-command orchestrator and a Streamlit dashboard for multi-city comparison.
+# 🌍 Air Quality Pipeline — Multi-City AQI Dashboard
 
+A modular Python project that **fetches, cleans, analyzes, and visualizes real-time air quality data**  
+using the [Open-Meteo Air Quality API](https://open-meteo.com/).  
+Includes an automated workflow, reproducible data pipeline, and an interactive **Streamlit dashboard**.
 
-✨ Features
+---
 
-Modular package: aq_pipeline/ (fetch, clean, analyze, plot, report)
+## 🧠 Project Overview
 
-CLI scripts: run each stage or the full pipeline
+This project automates the end-to-end process of **air-quality monitoring and visualization** for multiple cities.
 
-Orchestrator: run_pipeline.py (one command, one or many cities)
+**Key features:**
+- Fetches pollutants data (PM₂.₅, PM₁₀, NO₂, CO) from Open-Meteo API  
+- Cleans and processes raw data into daily means  
+- Generates pollutant trend visualizations and statistical summaries  
+- Builds a multi-city AQI dashboard for interactive comparison  
+- Automated **CI/CD testing pipeline** with GitHub Actions  
+- Fully reproducible via command line or PowerShell scripts
 
-Streamlit dashboard: multi-city time series, KPIs, PM-based AQI
+---
 
-Metrics: coverage %, mean, max, p95, trend slope, anomalies (IQR)
+## 🧩 Repository Structure
 
-Reproducibility: venv, requirements, deterministic outputs
-
-Extensible: easily add cities via CITY_LOOKUP
-
-🗂️ Project Structure
 air-quality-pipeline/
 ├── src/
-│   ├── aq_pipeline/
-│   │   ├── __init__.py
-│   │   ├── fetch.py        # Open-Meteo API (hourly → CSV)
-│   │   ├── clean.py        # hourly → daily means (+interpolation)
-│   │   ├── analyze.py      # metrics: coverage, p95, trend, anomalies
-│   │   ├── plot.py         # combined & per-pollutant PNGs
-│   │   ├── report.py       # text summary per run
-│   │   └── utils.py        # logging, param mapping, helpers
-│   └── dashboard_app.py    # Streamlit multi-city dashboard
-├── run_pipeline.py          # one-command orchestrator
-├── data/                    # (ignored) raw/processed CSVs
-├── figures/                 # (ignored) generated plots
-├── reports/                 # (ignored) text summaries
-├── requirements.txt
+│ ├── aq_pipeline/
+│ │ ├── fetch.py # Fetches data from API
+│ │ ├── clean.py # Cleans and preprocesses data
+│ │ ├── analyze.py # Calculates trends and stats
+│ │ ├── plot.py # Creates pollutant trend visualizations
+│ │ ├── report.py # Generates summary reports
+│ │ └── utils.py # Helper functions
+│ ├── dashboard_app.py # Streamlit dashboard
+│ └── tests/ # Pytest unit tests
+│
+├── run_pipeline.py # Main orchestrator for CLI workflow
+├── run.ps1 # Quick PowerShell runner
+├── requirements.txt # Dependencies
+├── .github/workflows/ci.yml # GitHub Actions workflow
+├── LICENSE
 └── README.md
 
+yaml
+Copy code
 
-Make sure .gitignore includes:
+---
 
-.venv/
-__pycache__/
-.ipynb_checkpoints/
-data/
-figures/
-reports/
+## ⚙️ Setup & Installation
 
-⚙️ Setup
-# 1) Clone
-git clone https://github.com/<you>/air-quality-pipeline.git
+### 1️⃣ Clone the repository
+```bash
+git clone https://github.com/msalehi7412/air-quality-pipeline.git
 cd air-quality-pipeline
-
-# 2) Create & activate venv
+2️⃣ Create a virtual environment and install dependencies
+bash
+Copy code
 python -m venv .venv
-# Windows:
-.venv\Scripts\activate
-# macOS/Linux:
-# source .venv/bin/activate
-
-# 3) Install deps
+.\.venv\Scripts\Activate.ps1     # (Windows)
 pip install -r requirements.txt
+🚀 Usage
+Option 1: Run the full pipeline (with date range)
+Fetch and process air-quality data for the last 5 months across all cities:
 
-🚀 Quickstart (One City)
-
-Fetch the last 10 days for Milan, clean, analyze, plot, and write a report:
-
-python run_pipeline.py --city milan --past-days 10 --timestamp
-
-
-Backfill 5 months of real data:
-
-# Windows PowerShell
+powershell
+Copy code
 $today  = (Get-Date).ToString('yyyy-MM-dd')
 $start5 = (Get-Date).AddMonths(-5).ToString('yyyy-MM-dd')
-python run_pipeline.py --city milan --start $start5 --end $today
 
+python run_pipeline.py --cities milan,paris,berlin,rome,tehran,madrid --start $start5 --end $today --timestamp
+Outputs:
 
-Outputs go to:
+data/raw/ and data/processed/ → CSV data files
 
-data/raw/...
-data/processed/...
-figures/...
-reports/...
+figures/ → pollutant plots
 
-🧭 Multi-City (One Command)
-python run_pipeline.py --cities milan,paris,berlin,rome,tehran,madrid --start 2025-05-01 --end 2025-10-17
+reports/ → summary text reports
 
+Option 2: Launch the interactive dashboard
+Visualize pollutant trends and AQI across cities:
 
-Add/remove cities in CITY_LOOKUP inside run_pipeline.py.
-
-🧪 CLI Reference
-python run_pipeline.py [--city CITY | --cities a,b,c] \
-  [--lat LAT --lon LON] \
-  [--parameters "pm25,pm10,no2,co"] \
-  [--past-days N | --start YYYY-MM-DD --end YYYY-MM-DD] \
-  [--no-interpolate] [--timestamp] [--dpi 150] [--log-level INFO]
-
-
---parameters (friendly names) are mapped to Open-Meteo fields:
-
-pm25 → pm2_5, pm10 → pm10, no2 → nitrogen_dioxide, co → carbon_monoxide
-
-📊 Streamlit Dashboard
+bash
+Copy code
 streamlit run src/dashboard_app.py
+Then open your browser at http://localhost:8501
 
+📊 Example Dashboard Preview
 
-Cities: pick one or many (auto-discovers latest processed CSV per city)
+(If you don’t have this image yet, take a screenshot of your dashboard and save it as
+figures/demo_dashboard.png to display it here.)
 
-Date range: select any dates within the last 5 months (or the full backfilled span)
+🧪 Testing (CI/CD)
+This project uses Pytest for unit testing and GitHub Actions for continuous integration.
 
-Tabs:
+Run tests locally:
 
-Time Series: daily pollutant lines
+bash
+Copy code
+pytest -q src/tests
+Each push or pull request automatically runs these tests in CI:
 
-KPIs: mean, p95 (95th percentile), max
+yaml
+Copy code
+.github/workflows/ci.yml
+🧠 Tech Stack
+Category	Tools
+Programming	Python (3.12)
+Data Handling	Pandas, NumPy
+Visualization	Matplotlib, Streamlit
+Automation	CLI workflow, PowerShell, argparse
+Testing	Pytest, GitHub Actions
+Data Source	Open-Meteo Air Quality API
 
-AQI (PM-based): overall AQI from PM₂.₅/PM₁₀ (US EPA breakpoints), latest category
+🧩 Example Insights
+Milan and Tehran showed higher PM₂.₅ variability over the last months.
 
-If you see empty charts for some dates, backfill that date range with --start/--end (see Quickstart).
+Paris and Berlin maintain relatively stable pollutant levels.
 
-📈 What’s in the Report
+Carbon monoxide peaks correlated with cooler months and reduced wind speed.
 
-Each run generates reports/<city>_*.txt with:
+📈 Continuous Integration
+The CI pipeline automatically:
 
-Date range
+Installs dependencies
 
-Per-pollutant: coverage%, mean, max, p95, trend slope (µg/m³/day), anomalies
+Runs all unit tests (pytest src/tests)
 
-Example:
+Reports pass/fail status on GitHub PRs
 
-City: Milan
-Range: 2025-05-20 – 2025-10-17
+You can view the latest run in the Actions tab.
 
-Pollutant Summary (daily):
-name | coverage% | mean | max | p95 | trend(µg/m³/day) | anomalies
-pm2_5 | 98.6 | 13.42 | 48.10 | 32.50 | 0.012 | 3
-pm10  | 98.6 | 22.51 | 77.22 | 46.10 | -0.005 | 2
-...
+📄 License
+Licensed under the MIT License — free to use and modify.
 
-🧰 Troubleshooting
-
-“No data in this period”: you haven’t fetched that range yet. Run:
-
-python run_pipeline.py --city CITY --start 2025-06-01 --end 2025-10-17
-
-
-Streamlit black page: stop (Ctrl+C), clear cache streamlit cache clear, retry on a new port:
-
-streamlit run src/dashboard_app.py --server.port 8502
-
-
-ModuleNotFoundError: aq_pipeline when running from repo root:
-
-You already have a fix at the top of run_pipeline.py that adds src/ to sys.path.
-
-Or install the package in editable mode later via pyproject.toml.
-
-🗺️ Roadmap (next)
-
-WHO guideline bands & rolling 7/30-day lines in plots
-
-EU/WHO AQI variants (include NO₂/CO)
-
-GitHub Actions CI (tests) + CRON job (daily fetch)
-
-Optional Dockerfile
-
-📜 License
-
-MIT (or your choice)
-
-🙌 Acknowledgments
-
-Data: Open-Meteo Air Quality API
-
-Python: pandas, matplotlib, streamlit
+👨‍💻 Author
+Masoud Salehi
+🌐 LinkedIn
+📧 masoudsalehi7412@gmail.com
+🔗 GitHub
