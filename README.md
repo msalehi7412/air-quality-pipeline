@@ -43,8 +43,6 @@ air-quality-pipeline/
 ├── LICENSE
 └── README.md
 
-yaml
-Copy code
 
 ---
 
@@ -55,8 +53,6 @@ Copy code
 git clone https://github.com/msalehi7412/air-quality-pipeline.git
 cd air-quality-pipeline
 2️⃣ Create a virtual environment and install dependencies
-bash
-Copy code
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1     # (Windows)
 pip install -r requirements.txt
@@ -64,8 +60,6 @@ pip install -r requirements.txt
 Option 1: Run the full pipeline (with date range)
 Fetch and process air-quality data for the last 5 months across all cities:
 
-powershell
-Copy code
 $today  = (Get-Date).ToString('yyyy-MM-dd')
 $start5 = (Get-Date).AddMonths(-5).ToString('yyyy-MM-dd')
 
@@ -81,8 +75,6 @@ reports/ → summary text reports
 Option 2: Launch the interactive dashboard
 Visualize pollutant trends and AQI across cities:
 
-bash
-Copy code
 streamlit run src/dashboard_app.py
 Then open your browser at http://localhost:8501
 
@@ -96,14 +88,11 @@ This project uses Pytest for unit testing and GitHub Actions for continuous inte
 
 Run tests locally:
 
-bash
-Copy code
 pytest -q src/tests
 Each push or pull request automatically runs these tests in CI:
 
-yaml
-Copy code
 .github/workflows/ci.yml
+
 🧠 Tech Stack
 Category	Tools
 Programming	Python (3.12)
