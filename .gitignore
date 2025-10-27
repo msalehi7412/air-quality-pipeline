@@ -25,3 +25,8 @@ reports/
 # Environment and cache
 .venv/
 __pycache__/
+
+# Python cache
+__pycache__/
+*.pyc
+
